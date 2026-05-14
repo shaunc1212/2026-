@@ -193,11 +193,17 @@
       gap: 10px;
     }
 
+    .date-item {
+      display: grid;
+      gap: 10px;
+    }
+
     .date-button {
       border-radius: 8px;
       min-height: 72px;
       padding: 10px 12px;
       text-align: left;
+      width: 100%;
       display: grid;
       grid-template-columns: 64px 1fr;
       gap: 12px;
@@ -228,6 +234,10 @@
 
     .content-panel {
       min-width: 0;
+    }
+
+    .mobile-day {
+      display: none;
     }
 
     .day-header {
@@ -428,16 +438,36 @@
 
       .date-panel {
         position: static;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
       }
 
       .date-button {
-        grid-template-columns: 1fr;
-        min-height: 92px;
+        grid-template-columns: 72px 1fr;
+        min-height: 78px;
       }
 
-      .info-grid {
+      .content-panel {
+        display: none;
+      }
+
+      .mobile-day {
+        display: grid;
+        gap: 10px;
+        padding: 0 0 12px 0;
+      }
+
+      .mobile-day .day-header {
+        box-shadow: none;
+        padding: 14px;
+      }
+
+      .mobile-day .day-header h3 {
+        font-size: 23px;
+      }
+
+      .mobile-day .info-grid {
         grid-template-columns: 1fr;
+        margin: 0;
       }
 
       .activity-card {
@@ -786,25 +816,27 @@
         id: "2026-06-05",
         date: "6月5日",
         weekday: "周五",
-        title: "前往佳博学校",
+        title: "前往佳博学校 + 佳博毕业典礼",
         city: "Bellefonte / State College",
         lodging: "441 Millgate Road, Bellefonte, PA 16823",
-        summary: "前往佳博学校，安排约 2.5 小时找人吃饭。",
+        summary: "前往佳博学校，并参加佳博毕业典礼。",
         activities: [
           activity("白天", "前往佳博学校", "交通", "从 Lancaster 区域前往 Bellefonte / State College 一带。", ["Penn State 周边山路和小镇较多，预留行车时间。"], "Bellefonte, PA"),
-          activity("约 2.5 小时", "找人吃饭", "用餐", "抵达后安排聚餐或探访。", ["晚间入住 Bellefonte。"], "441 Millgate Road, Bellefonte, PA 16823")
+          activity("按学校通知", "佳博毕业典礼", "活动", "当天参加佳博毕业典礼。", ["提前确认停车、入场时间和合影地点。", "晚间入住 Bellefonte。"], "Camp Kanesatake"),
+          activity("晚上", "Bellefonte 住宿", "酒店", "入住 441 Millgate Road。", ["第二天安排找辅导吃饭和 State College 游玩。"], "441 Millgate Road, Bellefonte, PA 16823")
         ]
       },
       {
         id: "2026-06-06",
         date: "6月6日",
         weekday: "周六",
-        title: "佳博毕业典礼",
-        city: "Camp Kanesatake",
+        title: "找辅导吃饭 + State College 游玩",
+        city: "Bellefonte / State College",
         lodging: "441 Millgate Road, Bellefonte, PA 16823",
-        summary: "参加佳博毕业典礼 Camp Kanesatake。",
+        summary: "安排找辅导吃饭，并在 State College 周边游玩。",
         activities: [
-          activity("按学校通知", "佳博毕业典礼", "活动", "毕业典礼在 Camp Kanesatake。", ["提前确认停车、入场时间和合影地点。", "山里天气变化快，可备外套。"], "Camp Kanesatake"),
+          activity("午饭/晚饭", "找辅导吃饭", "用餐", "和辅导安排聚餐或探访。", ["具体时间可以按对方方便调整。", "餐后可顺路在 State College 周边走走。"], "State College, PA"),
+          activity("白天", "State College 游玩", "城市", "State College 是 Penn State 所在的小城，校园和 downtown 都适合轻松散步。", ["可看 Penn State 校园、Old Main、downtown 小店。", "这天整体适合放慢节奏。"], "Penn State University"),
           activity("晚上", "Bellefonte 住宿", "酒店", "继续住 441 Millgate Road。", ["第二天毕业 party 后前往华盛顿。"], "441 Millgate Road, Bellefonte, PA 16823")
         ]
       },
@@ -813,12 +845,13 @@
         date: "6月7日",
         weekday: "周日",
         title: "毕业 Party，去华盛顿",
-        city: "State College / Washington DC",
-        lodging: "华盛顿",
-        summary: "佳博毕业 party 后前往 Washington DC。",
+        city: "State College / Washington DC / New York",
+        lodging: "5410 Dawes Avenue Alexandria, VA 22311",
+        summary: "佳博毕业 party 后前往 Washington DC；陈家当天去纽约。",
         activities: [
           activity("白天", "佳博毕业 Party", "活动", "毕业庆祝聚会。", ["聚会后检查行李、证件和返程航班信息。"], "State College, PA"),
-          activity("之后", "开车去华盛顿", "交通", "从宾州中部前往 Washington DC。", ["进入 DC 周边可能会堵车，建议预留时间。"], "Washington, DC")
+          activity("之后", "开车去华盛顿", "交通", "从宾州中部前往 Washington DC。", ["进入 DC 周边可能会堵车，建议预留时间。", "华盛顿住宿地址：5410 Dawes Avenue Alexandria, VA 22311。"], "5410 Dawes Avenue Alexandria, VA 22311"),
+          activity("同日", "陈家去纽约", "交通", "陈家当天前往纽约。", ["纽约方向路线和到达时间单独确认。"], "New York, NY")
         ]
       },
       {
@@ -827,7 +860,7 @@
         weekday: "周一",
         title: "华盛顿游览 / 杨绍鸿回程",
         city: "Washington DC",
-        lodging: "华盛顿",
+        lodging: "5410 Dawes Avenue Alexandria, VA 22311",
         summary: "杨绍鸿早上从 DCA 回程，其余人游览华盛顿。",
         activities: [
           activity("早上 6:59", "杨绍鸿 DCA 回程", "交通", "DCA T2，AA1839。", ["DCA 是里根国家机场，靠近市区。"], "Ronald Reagan Washington National Airport"),
@@ -841,7 +874,7 @@
         weekday: "周二",
         title: "华盛顿，笑笑和吴回程",
         city: "Washington DC",
-        lodging: "华盛顿",
+        lodging: "5410 Dawes Avenue Alexandria, VA 22311",
         summary: "白天可继续 DC 行程，晚上笑笑和吴从 IAD 回程。",
         activities: [
           activity("白天", "华盛顿继续游览", "城市", "DC 的博物馆集中，适合按体力安排。", ["可选择国家广场、博物馆或轻松休整。"], "National Mall, Washington, DC"),
@@ -923,6 +956,8 @@
       }
 
       days.forEach(day => {
+        const item = document.createElement("div");
+        item.className = "date-item";
         const button = document.createElement("button");
         button.className = "date-button" + (day.id === state.selectedId ? " active" : "");
         button.type = "button";
@@ -939,9 +974,21 @@
         button.addEventListener("click", () => {
           state.selectedId = day.id;
           render();
-          window.scrollTo({ top: 0, behavior: "smooth" });
         });
-        datePanel.appendChild(button);
+        item.appendChild(button);
+
+        if (day.id === state.selectedId) {
+          const mobileDay = document.createElement("div");
+          mobileDay.className = "mobile-day";
+          mobileDay.innerHTML = buildDayMarkup(day);
+          mobileDay.querySelectorAll("[data-activity-index]").forEach(card => {
+            const index = Number(card.getAttribute("data-activity-index"));
+            card.addEventListener("click", () => openDetail(day, day.activities[index], index));
+          });
+          item.appendChild(mobileDay);
+        }
+
+        datePanel.appendChild(item);
       });
 
       if (!days.length) {
@@ -958,12 +1005,35 @@
         return;
       }
 
-      dayHeader.innerHTML = `
+      dayHeader.innerHTML = buildDayHeader(day);
+      infoGrid.innerHTML = buildInfoGrid(day);
+
+      activityList.innerHTML = "";
+      day.activities.forEach((item, index) => {
+        const card = createActivityCard(item, index);
+        card.addEventListener("click", () => openDetail(day, item, index));
+        activityList.appendChild(card);
+      });
+    }
+
+    function buildDayMarkup(day) {
+      const activities = day.activities.map((item, index) => buildActivityMarkup(item, index)).join("");
+      return `
+        <div class="day-header">${buildDayHeader(day)}</div>
+        <div class="info-grid">${buildInfoGrid(day)}</div>
+        <div class="activity-list">${activities}</div>
+      `;
+    }
+
+    function buildDayHeader(day) {
+      return `
         <h3>${day.date} ${day.title}</h3>
         <p>${day.summary}</p>
       `;
+    }
 
-      infoGrid.innerHTML = [
+    function buildInfoGrid(day) {
+      return [
         ["城市", day.city],
         ["住宿", day.lodging],
         ["活动数", `${day.activities.length} 项`]
@@ -973,24 +1043,26 @@
           <div class="info-value">${value}</div>
         </div>
       `).join("");
+    }
 
-      activityList.innerHTML = "";
-      day.activities.forEach((item, index) => {
-        const card = document.createElement("button");
-        const cls = typeClass[item.type] || "";
-        card.className = "activity-card";
-        card.type = "button";
-        card.innerHTML = `
+    function buildActivityMarkup(item, index) {
+      const cls = typeClass[item.type] || "";
+      return `
+        <button class="activity-card" type="button" data-activity-index="${index}">
           <div class="activity-time">${item.time}</div>
           <div>
             <h4>${item.title}</h4>
             <p>${item.intro}</p>
           </div>
           <div class="activity-type ${cls}">${item.type}</div>
-        `;
-        card.addEventListener("click", () => openDetail(day, item, index));
-        activityList.appendChild(card);
-      });
+        </button>
+      `;
+    }
+
+    function createActivityCard(item, index) {
+      const template = document.createElement("template");
+      template.innerHTML = buildActivityMarkup(item, index).trim();
+      return template.content.firstElementChild;
     }
 
     function openDetail(day, item) {
