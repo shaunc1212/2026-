@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>美国之行 2026 行程</title>
+  <meta name="description" content="2026 年 5 月 19 日至 6 月 10 日美国家庭行程交互系统">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18202a;
+      --muted: #5f6975;
+      --line: #d9e1e8;
+      --paper: #fbfcfd;
+      --panel: #ffffff;
+      --blue: #2864a6;
+      --blue-dark: #17436f;
+      --green: #2c7a5b;
+      --yellow: #f2c14e;
+      --rose: #c75252;
+      --shadow: 0 14px 35px rgba(22, 36, 54, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 252, 253, .94);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 0;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 31px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-button, .pill-button, .date-button, .activity-card, .nav-button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .icon-button {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+    }
+
+    .icon-button:hover, .pill-button:hover, .date-button:hover, .activity-card:hover, .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(22, 36, 54, .09);
+      border-color: #aec0d0;
+    }
+
+    .hero {
+      background:
+        linear-gradient(110deg, rgba(24, 32, 42, .86), rgba(24, 32, 42, .46)),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80") center/cover;
+      min-height: 260px;
+      color: #fff;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 58px 18px 34px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(34px, 7vw, 68px);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 16px 0 0;
+      font-size: clamp(16px, 2vw, 21px);
+      color: rgba(255, 255, 255, .9);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 18px 54px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .search {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 14px;
+      background: #fff;
+      color: var(--ink);
+      width: 100%;
+    }
+
+    .pill-button {
+      min-height: 48px;
+      border-radius: 8px;
+      padding: 0 14px;
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .date-panel {
+      position: sticky;
+      top: 86px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .date-button {
+      border-radius: 8px;
+      min-height: 72px;
+      padding: 10px 12px;
+      text-align: left;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .date-button.active {
+      background: #e8f2fd;
+      border-color: var(--blue);
+      box-shadow: inset 4px 0 0 var(--blue);
+    }
+
+    .date-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .date-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .date-title {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .content-panel {
+      min-width: 0;
+    }
+
+    .day-header {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .day-header h3 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .day-header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 14px 0 20px;
+    }
+
+    .info-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      min-height: 92px;
+    }
+
+    .info-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .activity-card {
+      border-radius: 8px;
+      padding: 16px;
+      text-align: left;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 92px 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .activity-time {
+      color: var(--blue-dark);
+      font-weight: 800;
+      white-space: normal;
+    }
+
+    .activity-card h4 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .activity-card p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .activity-type {
+      padding: 6px 9px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      background: var(--green);
+      white-space: nowrap;
+    }
+
+    .activity-type.traffic { background: var(--blue); }
+    .activity-type.food { background: var(--rose); }
+    .activity-type.hotel { background: #725a9c; }
+
+    .empty {
+      padding: 22px;
+      border: 1px dashed #b8c4cf;
+      border-radius: 8px;
+      color: var(--muted);
+      background: #fff;
+    }
+
+    dialog {
+      border: 0;
+      padding: 0;
+      border-radius: 8px;
+      width: min(680px, calc(100vw - 28px));
+      box-shadow: 0 24px 70px rgba(11, 19, 30, .32);
+    }
+
+    dialog::backdrop {
+      background: rgba(8, 14, 22, .54);
+    }
+
+    .modal {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .modal-head {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 27px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .modal-body {
+      padding: 18px 20px 20px;
+    }
+
+    .modal-body p {
+      margin: 0 0 14px;
+      font-size: 17px;
+    }
+
+    .detail-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .detail-list li {
+      margin: 8px 0;
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      border-radius: 8px;
+      padding: 0 12px;
+      color: var(--blue-dark);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .close {
+      flex: 0 0 auto;
+    }
+
+    .print-note {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      .topbar-inner {
+        align-items: flex-start;
+      }
+
+      .quick-actions {
+        display: none;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .date-panel {
+        position: static;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .date-button {
+        grid-template-columns: 1fr;
+        min-height: 92px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-card {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-type {
+        width: fit-content;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero {
+        min-height: 220px;
+      }
+
+      .brand p {
+        display: none;
+      }
+
+      .date-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .day-header, .activity-card, .info-box {
+        padding: 14px;
+      }
+    }
+
+    @media print {
+      .topbar, .toolbar, .date-panel, dialog {
+        display: none !important;
+      }
+
+      .hero {
+        background: none;
+        color: #000;
+        min-height: auto;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .day-header, .activity-card, .info-box {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      .print-note {
+        display: block;
+        margin: 0 0 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="mark">US</div>
+        <div>
+          <h1>美国之行 2026</h1>
+          <p>5月19日 - 6月10日 家庭行程表</p>
+        </div>
+      </div>
+      <div class="quick-actions">
+        <button class="icon-button" id="todayBtn" title="跳到 5月25日" aria-label="跳到主要集合日">⌂</button>
+        <button class="icon-button" id="printBtn" title="打印行程" aria-label="打印行程">⎙</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h2>点日期，看每天安排</h2>
+      <p>活动、城市介绍、酒店地址、开车时间和地图入口都放在一个页面里，手机上也能直接使用。</p>
+    </div>
+  </section>
+
+  <main>
+    <p class="print-note">美国之行 2026 行程打印版</p>
+    <div class="toolbar">
+      <input class="search" id="searchInput" type="search" placeholder="搜索城市、活动、酒店，例如：达拉斯、尼加拉、毕业典礼">
+      <button class="pill-button" id="clearBtn">显示全部日期</button>
+    </div>
+
+    <div class="layout">
+      <nav class="date-panel" id="datePanel" aria-label="日期列表"></nav>
+      <section class="content-panel" aria-live="polite">
+        <div class="day-header" id="dayHeader"></div>
+        <div class="info-grid" id="infoGrid"></div>
+        <div class="activity-list" id="activityList"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="detailDialog">
+    <article class="modal">
+      <div class="modal-head">
+        <div>
+          <div class="info-label" id="modalMeta"></div>
+          <h3 id="modalTitle"></h3>
+        </div>
+        <button class="icon-button close" id="closeDialog" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="modalIntro"></p>
+        <ul class="detail-list" id="modalDetails"></ul>
+        <div class="link-row" id="modalLinks"></div>
+      </div>
+    </article>
+  </dialog>
+
+  <script>
+    const trip = [
+      {
+        id: "2026-05-19",
+        date: "5月19日",
+        weekday: "周二",
+        title: "家长抵达洛杉矶",
+        city: "洛杉矶",
+        lodging: "洛杉矶休整",
+        summary: "抵达后休整，调整时差，等待 5月21日飞往拉伯克。",
+        activities: [
+          activity("晚上 22:10", "成都天府飞洛杉矶", "交通", "刘、徐、陈、张搭乘 3U3837 出发。", ["抵达后优先休息，保留护照、签证、EVUS 和行李票。", "第二天适合轻松采购、补觉、确认后续航班。"], "成都天府国际机场"),
+          activity("全天", "洛杉矶休整", "城市", "洛杉矶是美国西海岸的大城市，适合作为入境后的调整站。", ["建议不要安排太紧的景点，重点是倒时差。", "可准备电话卡、常用药、车上零食和饮用水。"], "Los Angeles, CA")
+        ]
+      },
+      {
+        id: "2026-05-20",
+        date: "5月20日",
+        weekday: "周三",
+        title: "洛杉矶休整",
+        city: "洛杉矶",
+        lodging: "洛杉矶休整",
+        summary: "入境后的缓冲日，适合倒时差、采购和确认后续航班。",
+        activities: [
+          activity("全天", "倒时差和采购", "准备", "这天不用安排太满，重点是恢复体力。", ["可以买水、零食、常用药、转换插头等路上用品。", "确认 5月21日清晨 ONT 出发时间，前一晚早点休息。"], "Los Angeles, CA"),
+          activity("晚上", "整理证件和行李", "准备", "为第二天早班机提前把证件、行李和车程安排好。", ["护照、EVUS、机票信息放在随身包。", "设置多个闹钟，ONT 航班很早。"], "Ontario International Airport")
+        ]
+      },
+      {
+        id: "2026-05-21",
+        date: "5月21日",
+        weekday: "周四",
+        title: "飞往拉伯克",
+        city: "拉伯克",
+        lodging: "拉伯克",
+        summary: "从 Ontario 机场出发，经 Southwest 航班前往拉伯克。",
+        activities: [
+          activity("早上 5:30", "ONT 飞拉伯克", "交通", "刘、徐、陈、张、杨、吴搭乘 WN1695 + WN4012。", ["航班时间很早，建议前一晚整理好证件和行李。", "拉伯克位于德州西北部，是毕业典礼前的集合点。"], "Ontario International Airport"),
+          activity("抵达后", "拉伯克休整", "城市", "拉伯克是 Texas Tech University 所在城市，节奏比大城市慢。", ["适合补觉、采购、熟悉周边路线。", "提前确认 5月22日毕业典礼时间和停车位置。"], "Lubbock, TX")
+        ]
+      },
+      {
+        id: "2026-05-22",
+        date: "5月22日",
+        weekday: "周五",
+        title: "杨昊燃毕业典礼",
+        city: "拉伯克",
+        lodging: "拉伯克",
+        summary: "参加毕业典礼，结束后准备第二天分头行程。",
+        activities: [
+          activity("按学校通知", "毕业典礼", "活动", "杨昊燃毕业典礼日，建议提前到场拍照和找座位。", ["带好邀请信息、证件、充电宝。", "典礼结束后适合安排家庭合影。"], "Texas Tech University, Lubbock, TX"),
+          activity("晚上", "整理后续行程", "准备", "父母组准备自驾达拉斯、休斯顿；孩子们准备 Baltimore 营会。", ["确认租车、酒店、第二天 2 点出发计划。", "水、零食、防晒用品可以提前放车上。"], "Lubbock, TX")
+        ]
+      },
+      {
+        id: "2026-05-23",
+        date: "5月23日",
+        weekday: "周六",
+        title: "拉伯克到达拉斯",
+        city: "达拉斯",
+        lodging: "Dallas Marriott Suites Medical/Market Center",
+        summary: "父母和笑笑自驾前往达拉斯；孩子们参加 Baltimore 营会。",
+        activities: [
+          activity("中午 2:00", "从拉伯克出发", "交通", "开车约 5.5 到 6 小时，全程约 350 英里。", ["这一天重点是赶路，途中注意休息。", "建议每 2 小时左右停车活动一下。"], "Lubbock, TX to Dallas, TX"),
+          activity("晚上", "抵达达拉斯酒店", "酒店", "入住 Dallas Marriott Suites Medical/Market Center。", ["到达后可以简单吃饭、早点休息。", "第二天上午安排市区轻松路线。"], "Dallas Marriott Suites Medical/Market Center")
+        ]
+      },
+      {
+        id: "2026-05-24",
+        date: "5月24日",
+        weekday: "周日",
+        title: "达拉斯半日游，下午去休斯顿",
+        city: "达拉斯 / 休斯顿",
+        lodging: "休斯顿",
+        summary: "上午达拉斯市区路线，下午开车约 4 小时前往休斯顿。",
+        activities: [
+          activity("上午", "达拉斯市区步行路线", "活动", "Reunion Tower、Dealey Plaza、Giant Eyeball、Thanks-Giving Square、Klyde Warren Park。", ["总里程约 2.5 英里，城区景点集中。", "Reunion Tower 可俯瞰全城；Dealey Plaza 是肯尼迪遇刺历史现场；Klyde Warren Park 适合休息和吃小吃。"], "Reunion Tower, Dallas, TX"),
+          activity("下午", "开车去休斯顿", "交通", "达拉斯到休斯顿车程约 4 小时。", ["建议避开晚高峰进入休斯顿。", "休斯顿是德州最大城市，第二天可选择 NASA 或 Rice University + 市区。"], "Dallas, TX to Houston, TX")
+        ]
+      },
+      {
+        id: "2026-05-25",
+        date: "5月25日",
+        weekday: "周一",
+        title: "休斯顿半日游，纳什维尔集合",
+        city: "休斯顿 / 纳什维尔",
+        lodging: "738 Douglas Avenue, Nashville, TN 37207",
+        summary: "下午飞往纳什维尔，晚上所有人集合。",
+        activities: [
+          activity("上午", "NASA 或 Rice University + 城区", "活动", "休斯顿半日游可以二选一：NASA 更适合航天主题，Rice + 市区更轻松。", ["NASA Johnson Space Center 适合喜欢航天的人，建议预留较完整时间。", "Rice University 校园安静漂亮，适合轻松散步。"], "Space Center Houston"),
+          activity("下午 4:20", "父母组飞纳什维尔", "交通", "父母们 + 笑笑从 IAH 搭乘 UA2165。孩子们从 BWI 搭乘 WN422，下午 4:35 起飞。", ["当天有两组航班，注意机场不同。", "抵达后前往 Nashville 住宿地址集合。"], "Nashville International Airport"),
+          activity("晚上", "纳什维尔集合晚饭", "用餐", "所有人在纳什维尔集合，预计 12 人，分组 5 + 4 + 3。", ["纳什维尔是田纳西州首府，以乡村音乐闻名。", "第一晚以集合、吃饭、休息为主。"], "738 Douglas Avenue, Nashville, TN 37207")
+        ]
+      },
+      {
+        id: "2026-05-26",
+        date: "5月26日",
+        weekday: "周二",
+        title: "猛犸洞国家公园，去路易维尔",
+        city: "Mammoth Cave / Louisville",
+        lodging: "547 Saint Catherine Street, Louisville, KY 40203",
+        summary: "中午从纳什维尔出发，参观 Mammoth Cave，晚上住 Louisville。",
+        activities: [
+          activity("12:30", "出发去 Mammoth Cave", "交通", "从纳什维尔出发约 1.5 到 2 小时。", ["Mammoth Cave 是世界知名的洞穴国家公园。", "洞内温度较低，建议带薄外套和舒适鞋。"], "1 Mammoth Cave Pkwy, Mammoth Cave, KY 42259"),
+          activity("下午", "Historic Tour", "活动", "参加猛犸洞 Historic Tour，了解洞穴历史和地貌。", ["需要按预约时间到达游客中心。", "洞内台阶较多，行动慢一点更稳妥。"], "Mammoth Cave National Park"),
+          activity("晚上", "前往 Louisville 住宿", "酒店", "从公园到 Louisville 约 1.5 小时。", ["Louisville 是 Kentucky 最大城市之一，晚间以入住休息为主。"], "547 Saint Catherine Street, Louisville, KY 40203")
+        ]
+      },
+      {
+        id: "2026-05-27",
+        date: "5月27日",
+        weekday: "周三",
+        title: "诺亚方舟，去创造博物馆附近",
+        city: "Williamstown / Covington",
+        lodging: "210 Wright Street, Covington, KY 41011",
+        summary: "参观 Ark Encounter，晚上住 Creation Museum 附近。",
+        activities: [
+          activity("上午", "开车去 Ark Encounter", "交通", "从 Louisville 开车约 1.5 小时到 Williamstown。", ["Ark Encounter 是大型诺亚方舟主题园区。", "园区较大，建议穿舒适鞋。"], "1 Ark Encounter Dr, Williamstown, KY 41097"),
+          activity("白天", "逛诺亚方舟", "活动", "参观方舟模型、展览和户外区域。", ["适合慢慢走，适合家庭一起拍照。", "注意集合时间，避免园区内走散。"], "Ark Encounter"),
+          activity("晚上", "住 Covington", "酒店", "入住 Creation Museum 附近，方便第二天 9:30 参观。", ["Covington 靠近 Cincinnati，可作为博物馆前一晚住宿点。"], "210 Wright Street, Covington, KY 41011")
+        ]
+      },
+      {
+        id: "2026-05-28",
+        date: "5月28日",
+        weekday: "周四",
+        title: "创造博物馆，前往匹兹堡",
+        city: "Petersburg / Pittsburgh",
+        lodging: "32 Mayflower Street, Pittsburgh, PA 15206",
+        summary: "上午参观 Creation Museum，之后开车约 4.5 小时去 Pittsburgh。",
+        activities: [
+          activity("9:30", "参观 Creation Museum", "活动", "创造博物馆位于 Kentucky Petersburg，展示圣经创造主题内容。", ["按 9:30 到达安排参观。", "午饭后准备长途开车。"], "2800 Bullittsburg Church Rd, Petersburg, KY 41080"),
+          activity("下午", "出发去 Pittsburgh", "交通", "开车约 4.5 小时前往匹兹堡。", ["匹兹堡是三河交汇城市，桥很多，山路和城区坡度也比较明显。"], "Petersburg, KY to Pittsburgh, PA"),
+          activity("晚上", "匹兹堡自己做饭", "用餐", "入住 32 Mayflower Street，晚饭自己做。", ["到达后可采购简单食材。"], "32 Mayflower Street, Pittsburgh, PA 15206")
+        ]
+      },
+      {
+        id: "2026-05-29",
+        date: "5月29日",
+        weekday: "周五",
+        title: "匹兹堡休整",
+        city: "匹兹堡",
+        lodging: "32 Mayflower Street, Pittsburgh, PA 15206",
+        summary: "匹兹堡停留，可休整、采购、轻松逛城市。",
+        activities: [
+          activity("白天", "匹兹堡城市轻松逛", "城市", "匹兹堡有三条河、很多桥和山景，城市不大但很有层次。", ["可考虑 Point State Park、Duquesne Incline 或大学区。", "这天也适合作为长途行程中的缓冲日。"], "Pittsburgh, PA"),
+          activity("晚上", "住宿休息", "酒店", "继续住 32 Mayflower Street。", ["第二天下午 1 点出发去 Buffalo，提前整理行李。"], "32 Mayflower Street, Pittsburgh, PA 15206")
+        ]
+      },
+      {
+        id: "2026-05-30",
+        date: "5月30日",
+        weekday: "周六",
+        title: "前往水牛城",
+        city: "Buffalo",
+        lodging: "736 Union Road, West Seneca, NY 14224",
+        summary: "下午从 Pittsburgh 出发去 Buffalo，约 4 小时。",
+        activities: [
+          activity("下午 1:00", "出发去 Buffalo", "交通", "匹兹堡到 Buffalo 车程约 4 小时。", ["刘雅麒飞去纽约一趟，当晚人数预计 11 人。", "Buffalo 靠近尼亚加拉瀑布，是第二天游览的住宿点。"], "Pittsburgh, PA to Buffalo, NY"),
+          activity("晚上", "West Seneca 入住", "酒店", "入住 736 Union Road, West Seneca。", ["可简单晚饭，早点休息。"], "736 Union Road, West Seneca, NY 14224")
+        ]
+      },
+      {
+        id: "2026-05-31",
+        date: "5月31日",
+        weekday: "周日",
+        title: "尼亚加拉瀑布和水牛城",
+        city: "Niagara Falls / Buffalo",
+        lodging: "736 Union Road, West Seneca, NY 14224",
+        summary: "参观尼亚加拉瀑布，之后水牛城轻松逛。",
+        activities: [
+          activity("白天", "尼亚加拉瀑布", "活动", "尼亚加拉瀑布是北美最著名的瀑布群之一，水量巨大，现场很震撼。", ["瀑布附近风大水汽重，建议带防水外套。", "美国侧可看 Observation Tower、Goat Island 等。"], "Niagara Falls State Park"),
+          activity("下午/晚上", "水牛城逛逛", "城市", "Buffalo 位于纽约州西部，以瀑布门户城市和 Buffalo wings 闻名。", ["回酒店前可安排晚饭。"], "Buffalo, NY")
+        ]
+      },
+      {
+        id: "2026-06-01",
+        date: "6月1日",
+        weekday: "周一",
+        title: "玻璃博物馆，去兰卡斯特",
+        city: "Corning / Lancaster",
+        lodging: "403 Shirktown Road, Narvon, PA 17555",
+        summary: "上午去 Corning Museum of Glass，下午前往 Lancaster。",
+        activities: [
+          activity("9:30", "出发去 Corning Museum of Glass", "交通", "从 Buffalo 出发约 2.5 小时。", ["Corning 是玻璃工艺重镇，博物馆适合 1 到 2 小时参观。"], "1 Museum Way, Corning, NY 14830"),
+          activity("中午/下午", "参观玻璃博物馆", "活动", "展览包括玻璃历史、艺术作品和现场演示。", ["现场演示通常很受欢迎，适合全家一起看。"], "Corning Museum of Glass"),
+          activity("下午", "出发去 Lancaster", "交通", "从 Corning 到 Lancaster 约 3.5 小时。", ["到达后采购一下，准备接下来几天 Amish 区域行程。"], "403 Shirktown Road, Narvon, PA 17555")
+        ]
+      },
+      {
+        id: "2026-06-02",
+        date: "6月2日",
+        weekday: "周二",
+        title: "兰卡斯特 Amish 体验",
+        city: "Lancaster",
+        lodging: "403 Shirktown Road, Narvon, PA 17555",
+        summary: "Amish Farm & House、Buggy Ride、Shady Maple 午饭。",
+        activities: [
+          activity("上午", "Amish Farm & House", "活动", "了解 Amish 社群的生活方式、农场和传统。", ["适合慢慢参观，尊重当地居民生活方式。"], "Amish Farm and House, Lancaster, PA"),
+          activity("9:00-17:00", "Buggy Ride", "活动", "马车体验营业时间约 9 am - 5 pm。", ["马车体验更有乡村感，注意天气和排队情况。"], "Lancaster Buggy Rides"),
+          activity("午饭", "Shady Maple", "用餐", "Shady Maple 距 downtown 约 30 分钟，是当地很有名的自助餐地点。", ["饭点人可能较多，预留排队时间。"], "Shady Maple Smorgasbord")
+        ]
+      },
+      {
+        id: "2026-06-03",
+        date: "6月3日",
+        weekday: "周三",
+        title: "市场和 Sight & Sound 剧场",
+        city: "Lancaster",
+        lodging: "403 Shirktown Road, Narvon, PA 17555",
+        summary: "上午市场，下午 3 点到 6 点 Joshua Show。",
+        activities: [
+          activity("早上", "Central Market 或 Bird-in-Hand Market", "活动", "Lancaster Central Market 营业约 6 am - 3 pm，也可选择 Bird-in-Hand Market。", ["市场适合买本地食物、点心和小礼物。"], "Lancaster Central Market"),
+          activity("下午 3:00-6:00", "Sight & Sound Theater - Joshua", "活动", "Sight & Sound 是 Lancaster 著名圣经主题剧场，舞台规模大。", ["建议提前到场停车入座。", "演出结束后再安排晚饭。"], "Sight & Sound Theatres, Ronks, PA")
+        ]
+      },
+      {
+        id: "2026-06-04",
+        date: "6月4日",
+        weekday: "周四",
+        title: "Kreider Farm Tour，费城 Outlet",
+        city: "Lancaster",
+        lodging: "403 Shirktown Road, Narvon, PA 17555",
+        summary: "奶制品工厂 tour，之后可去费城 outlet；陈家去 State College。",
+        activities: [
+          activity("白天", "Kreider Farm Tour", "活动", "90 分钟左右的奶制品工厂和农场 tour。", ["适合了解当地农业和奶制品生产。"], "Kreider Farms, Manheim, PA"),
+          activity("之后", "费城 Outlet", "购物", "可安排去费城附近 outlet 购物。", ["注意返程时间，不要太晚。"], "Philadelphia Premium Outlets"),
+          activity("同日", "陈家去 State College", "交通", "陈家当天前往 State College。", ["路线和到达时间需单独确认。"], "State College, PA")
+        ]
+      },
+      {
+        id: "2026-06-05",
+        date: "6月5日",
+        weekday: "周五",
+        title: "前往佳博学校",
+        city: "Bellefonte / State College",
+        lodging: "441 Millgate Road, Bellefonte, PA 16823",
+        summary: "前往佳博学校，安排约 2.5 小时找人吃饭。",
+        activities: [
+          activity("白天", "前往佳博学校", "交通", "从 Lancaster 区域前往 Bellefonte / State College 一带。", ["Penn State 周边山路和小镇较多，预留行车时间。"], "Bellefonte, PA"),
+          activity("约 2.5 小时", "找人吃饭", "用餐", "抵达后安排聚餐或探访。", ["晚间入住 Bellefonte。"], "441 Millgate Road, Bellefonte, PA 16823")
+        ]
+      },
+      {
+        id: "2026-06-06",
+        date: "6月6日",
+        weekday: "周六",
+        title: "佳博毕业典礼",
+        city: "Camp Kanesatake",
+        lodging: "441 Millgate Road, Bellefonte, PA 16823",
+        summary: "参加佳博毕业典礼 Camp Kanesatake。",
+        activities: [
+          activity("按学校通知", "佳博毕业典礼", "活动", "毕业典礼在 Camp Kanesatake。", ["提前确认停车、入场时间和合影地点。", "山里天气变化快，可备外套。"], "Camp Kanesatake"),
+          activity("晚上", "Bellefonte 住宿", "酒店", "继续住 441 Millgate Road。", ["第二天毕业 party 后前往华盛顿。"], "441 Millgate Road, Bellefonte, PA 16823")
+        ]
+      },
+      {
+        id: "2026-06-07",
+        date: "6月7日",
+        weekday: "周日",
+        title: "毕业 Party，去华盛顿",
+        city: "State College / Washington DC",
+        lodging: "华盛顿",
+        summary: "佳博毕业 party 后前往 Washington DC。",
+        activities: [
+          activity("白天", "佳博毕业 Party", "活动", "毕业庆祝聚会。", ["聚会后检查行李、证件和返程航班信息。"], "State College, PA"),
+          activity("之后", "开车去华盛顿", "交通", "从宾州中部前往 Washington DC。", ["进入 DC 周边可能会堵车，建议预留时间。"], "Washington, DC")
+        ]
+      },
+      {
+        id: "2026-06-08",
+        date: "6月8日",
+        weekday: "周一",
+        title: "华盛顿游览 / 杨绍鸿回程",
+        city: "Washington DC",
+        lodging: "华盛顿",
+        summary: "杨绍鸿早上从 DCA 回程，其余人游览华盛顿。",
+        activities: [
+          activity("早上 6:59", "杨绍鸿 DCA 回程", "交通", "DCA T2，AA1839。", ["DCA 是里根国家机场，靠近市区。"], "Ronald Reagan Washington National Airport"),
+          activity("白天", "华盛顿圣经博物馆", "活动", "Museum of the Bible 位于 National Mall 附近，适合安排半天。", ["周边停车不容易，建议查好停车场或用车接送。"], "Museum of the Bible, Washington, DC"),
+          activity("可选", "拜访永明哥 / 印钞厂", "活动", "根据时间安排拜访和 Bureau of Engraving and Printing。", ["印钞厂参观通常需要确认开放和预约情况。"], "Bureau of Engraving and Printing, Washington, DC")
+        ]
+      },
+      {
+        id: "2026-06-09",
+        date: "6月9日",
+        weekday: "周二",
+        title: "华盛顿，笑笑和吴回程",
+        city: "Washington DC",
+        lodging: "华盛顿",
+        summary: "白天可继续 DC 行程，晚上笑笑和吴从 IAD 回程。",
+        activities: [
+          activity("白天", "华盛顿继续游览", "城市", "DC 的博物馆集中，适合按体力安排。", ["可选择国家广场、博物馆或轻松休整。"], "National Mall, Washington, DC"),
+          activity("晚上 21:00", "笑笑和吴 IAD 回程", "交通", "IAD，QR708。", ["IAD 离市区较远，建议提前出发。"], "Dulles International Airport")
+        ]
+      },
+      {
+        id: "2026-06-10",
+        date: "6月10日",
+        weekday: "周三",
+        title: "华盛顿，刘徐陈张回国",
+        city: "Washington DC",
+        lodging: "返程",
+        summary: "晚上从 IAD 搭乘 BA292 回国。",
+        activities: [
+          activity("白天", "整理行李和最后采购", "准备", "返程前整理行李、退房、确认托运行李额度。", ["护照、签证材料、机票信息放在随身包。", "液体、食品和纪念品按航空要求打包。"], "Washington, DC"),
+          activity("晚上 10:25", "IAD BA292 回程", "交通", "刘、徐、陈、张从 IAD 搭乘 BA292。", ["国际航班建议提前到机场。"], "Dulles International Airport")
+        ]
+      }
+    ];
+
+    function activity(time, title, type, intro, details, place) {
+      return { time, title, type, intro, details, place };
+    }
+
+    const typeClass = {
+      "交通": "traffic",
+      "用餐": "food",
+      "酒店": "hotel",
+      "城市": "",
+      "活动": "",
+      "准备": "",
+      "购物": "food"
+    };
+
+    const state = {
+      selectedId: "2026-05-25",
+      query: ""
+    };
+
+    const datePanel = document.getElementById("datePanel");
+    const dayHeader = document.getElementById("dayHeader");
+    const infoGrid = document.getElementById("infoGrid");
+    const activityList = document.getElementById("activityList");
+    const searchInput = document.getElementById("searchInput");
+    const clearBtn = document.getElementById("clearBtn");
+    const todayBtn = document.getElementById("todayBtn");
+    const printBtn = document.getElementById("printBtn");
+    const dialog = document.getElementById("detailDialog");
+    const closeDialog = document.getElementById("closeDialog");
+
+    function normalize(text) {
+      return String(text || "").toLowerCase().replace(/\s+/g, "");
+    }
+
+    function matchesDay(day, query) {
+      if (!query) return true;
+      const haystack = normalize([
+        day.date,
+        day.weekday,
+        day.title,
+        day.city,
+        day.lodging,
+        day.summary,
+        ...day.activities.flatMap(item => [item.time, item.title, item.type, item.intro, item.place, ...item.details])
+      ].join(" "));
+      return haystack.includes(normalize(query));
+    }
+
+    function filteredTrip() {
+      return trip.filter(day => matchesDay(day, state.query));
+    }
+
+    function renderDates() {
+      const days = filteredTrip();
+      datePanel.innerHTML = "";
+      if (!days.some(day => day.id === state.selectedId) && days.length) {
+        state.selectedId = days[0].id;
+      }
+
+      days.forEach(day => {
+        const button = document.createElement("button");
+        button.className = "date-button" + (day.id === state.selectedId ? " active" : "");
+        button.type = "button";
+        button.innerHTML = `
+          <div>
+            <div class="date-num">${day.date}</div>
+            <div class="date-meta">${day.weekday}</div>
+          </div>
+          <div>
+            <div class="date-title">${day.title}</div>
+            <div class="date-meta">${day.city}</div>
+          </div>
+        `;
+        button.addEventListener("click", () => {
+          state.selectedId = day.id;
+          render();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        datePanel.appendChild(button);
+      });
+
+      if (!days.length) {
+        datePanel.innerHTML = `<div class="empty">没有找到相关日期，请换一个关键词。</div>`;
+      }
+    }
+
+    function renderDay() {
+      const day = trip.find(item => item.id === state.selectedId) || filteredTrip()[0];
+      if (!day) {
+        dayHeader.innerHTML = `<h3>没有找到行程</h3><p>请清空搜索后再试。</p>`;
+        infoGrid.innerHTML = "";
+        activityList.innerHTML = "";
+        return;
+      }
+
+      dayHeader.innerHTML = `
+        <h3>${day.date} ${day.title}</h3>
+        <p>${day.summary}</p>
+      `;
+
+      infoGrid.innerHTML = [
+        ["城市", day.city],
+        ["住宿", day.lodging],
+        ["活动数", `${day.activities.length} 项`]
+      ].map(([label, value]) => `
+        <div class="info-box">
+          <div class="info-label">${label}</div>
+          <div class="info-value">${value}</div>
+        </div>
+      `).join("");
+
+      activityList.innerHTML = "";
+      day.activities.forEach((item, index) => {
+        const card = document.createElement("button");
+        const cls = typeClass[item.type] || "";
+        card.className = "activity-card";
+        card.type = "button";
+        card.innerHTML = `
+          <div class="activity-time">${item.time}</div>
+          <div>
+            <h4>${item.title}</h4>
+            <p>${item.intro}</p>
+          </div>
+          <div class="activity-type ${cls}">${item.type}</div>
+        `;
+        card.addEventListener("click", () => openDetail(day, item, index));
+        activityList.appendChild(card);
+      });
+    }
+
+    function openDetail(day, item) {
+      document.getElementById("modalMeta").textContent = `${day.date} ${day.weekday} · ${item.time} · ${item.type}`;
+      document.getElementById("modalTitle").textContent = item.title;
+      document.getElementById("modalIntro").textContent = item.intro;
+      document.getElementById("modalDetails").innerHTML = item.details.map(detail => `<li>${detail}</li>`).join("");
+
+      const links = document.getElementById("modalLinks");
+      const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.place || day.city)}`;
+      const search = `https://www.google.com/search?q=${encodeURIComponent(item.title + " " + (item.place || day.city))}`;
+      links.innerHTML = `
+        <a class="nav-button" href="${maps}" target="_blank" rel="noreferrer">打开地图</a>
+        <a class="nav-button" href="${search}" target="_blank" rel="noreferrer">查看介绍</a>
+      `;
+
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+      } else {
+        alert(`${item.title}\n\n${item.intro}\n\n${item.details.join("\n")}`);
+      }
+    }
+
+    function render() {
+      renderDates();
+      renderDay();
+    }
+
+    searchInput.addEventListener("input", event => {
+      state.query = event.target.value;
+      render();
+    });
+
+    clearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      state.query = "";
+      state.selectedId = "2026-05-25";
+      render();
+    });
+
+    todayBtn.addEventListener("click", () => {
+      state.selectedId = "2026-05-25";
+      state.query = "";
+      searchInput.value = "";
+      render();
+    });
+
+    printBtn.addEventListener("click", () => window.print());
+    closeDialog.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    render();
+  </script>
+</body>
+</html>
